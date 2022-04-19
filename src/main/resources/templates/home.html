@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www/thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@^3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@^2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
+    <script defer type="text/javascript" src="js/scriptToFetchData.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script th:inline="javascript">
+                var stationBtnList = [[${ stationList }]];
+    </script>
+    <script defer src="js/manupilateDOM.js"></script>
+</head>
+
+<body>
+
+    <div style="margin: 30px">
+        <ul id="checkBoxForMetroSelect">
+        </ul>
+    </div>
+
+    <div style="width: 800px;margin: 30px">
+        <table class="table table-bordered">
+            <tr>
+                <td colspan="3">
+                    <div id="checkBoxForMetroSelect" style="margin: 10px">
+                    </div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-dark" onclick="submitStation()"> Submit Stations</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="start">
+                        Start month:
+                    </label>
+                    <input type="month" id="startMonthSelector" min="2017-01" max="2022-02" value="2017-01">
+                </td>
+                <td> To </td>
+                <td>
+                    <label for="start">
+                        End month:
+                    </label>
+                    <input type="month" id="endMonthSelector" min="2017-01" max="2022-02" value="2022-02">
+                </td>
+                <td>
+                    <button type="button" class="btn btn-dark" onclick="submitDateRange()"> Submit Date
+                        Interval</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="width:1000px;height:1000px;margin: 30px">
+        <canvas id="myChart"></canvas>
+    </div>
+</body>
+
+</html>

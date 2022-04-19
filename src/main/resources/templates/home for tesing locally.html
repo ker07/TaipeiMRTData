@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www/thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@^3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@^2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
+    <script defer src="../static/js/scriptToFetchData.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script th:inline="javascript">
+        var stationBtnList = { "R21": ["R", "R21 \u5947\u5CA9"], "R20": ["R", "R20 \u552D\u54E9\u5CB8"], "R23": ["R", "R23 \u5FA9\u8208\u5D17"], "R22": ["R", "R22 \u5317\u6295"], "R25": ["R", "R25 \u95DC\u6E21"], "BL23": ["BL", "BL23 \u5357\u6E2F\u5C55\u89BD\u9928"], "R24": ["R", "R24 \u5FE0\u7FA9"], "BL22": ["BL", "BL22 \u5357\u6E2F"], "R27": ["R", "R27 \u7D05\u6A39\u6797"], "BL21": ["BL", "BL21 \u6606\u967D"], "R26": ["R", "R26 \u7AF9\u570D"], "BL20": ["BL", "BL20 \u5F8C\u5C71\u57E4"], "R28": ["R", "R28 \u6DE1\u6C34"], "Y08": ["Y", "Y08 \u5341\u56DB\u5F35"], "Y07": ["Y", "Y07 \u5927\u576A\u6797"], "Y09": ["Y", "Y09 \u79C0\u6717\u6A4B"], "O51": ["O", "O51 \u4E09\u548C\u570B\u4E2D"], "O50": ["O", "O50 \u4E09\u91CD\u570B\u5C0F"], "O53": ["O", "O53 \u4E09\u6C11\u9AD8\u4E2D"], "O52": ["O", "O52 \u5F90\u532F\u4E2D\u5B78"], "O54": ["O", "O54 \u8606\u6D32"], "Y11": ["Y", "Y11 \u666F\u5B89"], "Y10": ["Y", "Y10 \u666F\u5E73"], "Y13": ["Y", "Y13 \u6A4B\u548C"], "Y12": ["Y", "Y12 \u4E2D\u548C"], "Y15": ["Y", "Y15 \u677F\u65B0"], "Y14": ["Y", "Y14 \u4E2D\u539F"], "Y17": ["Y", "Y17 \u65B0\u57D4\u6C11\u751F"], "Y16": ["Y", "Y16 Y \u677F\u6A4B"], "Y19": ["Y", "Y19 \u5E78\u798F"], "Y18": ["Y", "Y18 \u982D\u524D\u5E84"], "BR09": ["BR", "BR09 \u5927\u5B89"], "BR08": ["BR", "BR08 \u79D1\u6280\u5927\u6A13"], "BR07": ["BR", "BR07 \u516D\u5F35\u7281"], "BR06": ["BR", "BR06 \u9E9F\u5149"], "R22A": ["R", "R22A \u65B0\u5317\u6295"], "BR05": ["BR", "BR05 \u8F9B\u4EA5"], "BR04": ["BR", "BR04 \u842C\u82B3\u91AB\u9662"], "BR03": ["BR", "BR03 \u842C\u82B3\u793E\u5340"], "BR02": ["BR", "BR02 \u6728\u67F5"], "BR01": ["BR", "BR01 \u52D5\u7269\u5712"], "Y20": ["Y", "Y20 \u65B0\u5317\u7522\u696D\u5712\u5340"], "BR19": ["BR", "BR19 \u5167\u6E56"], "BR18": ["BR", "BR18 \u6587\u5FB7"], "BR17": ["BR", "BR17 \u6E2F\u5898"], "BR16": ["BR", "BR16 \u897F\u6E56"], "BR15": ["BR", "BR15 \u528D\u5357\u8DEF"], "BR14": ["BR", "BR14 \u5927\u76F4"], "BR13": ["BR", "BR13 \u677E\u5C71\u6A5F\u5834"], "BR12": ["BR", "BR12 \u4E2D\u5C71\u570B\u4E2D"], "BR11": ["BR", "BR11 \u5357\u4EAC\u5FA9\u8208"], "BR10": ["BR", "BR10 \u5FE0\u5B5D\u5FA9\u8208"], "G02": ["G", "G02 \u65B0\u5E97\u5340\u516C\u6240"], "G01": ["G", "G01 \u65B0\u5E97"], "G04": ["G", "G04 \u5927\u576A\u6797"], "G03": ["G", "G03 \u4E03\u5F35"], "G06": ["G", "G06 \u842C\u9686"], "G05": ["G", "G05 \u666F\u7F8E"], "BR24": ["BR", "BR24 \u5357\u6E2F\u5C55\u89BD\u9928"], "G08": ["G", "G08 \u53F0\u96FB\u5927\u6A13"], "BR23": ["BR", "BR23 \u5357\u6E2F\u8EDF\u9AD4\u5712\u5340"], "G07": ["G", "G07 \u516C\u9928"], "BR22": ["BR", "BR22 \u6771\u6E56"], "O02": ["O", "O02 \u666F\u5B89"], "BR21": ["BR", "BR21 \u846B\u6D32"], "G09": ["G", "G09 \u53E4\u4EAD"], "O01": ["O", "O01 \u5357\u52E2\u89D2"], "BR20": ["BR", "BR20 \u5927\u6E56\u516C\u5712"], "O04": ["O", "O04 \u9802\u6EAA"], "O03": ["O", "O03 \u6C38\u5B89\u5E02\u5834"], "O06": ["O", "O06 \u6771\u9580"], "O05": ["O", "O05 \u53E4\u4EAD"], "O08": ["O", "O08 \u677E\u6C5F\u5357\u4EAC"], "O07": ["O", "O07 \u5FE0\u5B5D\u65B0\u751F"], "O09": ["O", "O09 \u884C\u5929\u5BAE"], "G11": ["G", "G11 \u5C0F\u5357\u9580"], "G10": ["G", "G10 \u4E2D\u6B63\u7D00\u5FF5\u5802"], "G13": ["G", "G13 \u5317\u9580"], "G12": ["G", "G12 \u897F\u9580"], "G15": ["G", "G15 \u677E\u6C5F\u5357\u4EAC"], "G14": ["G", "G14 \u4E2D\u5C71"], "G17": ["G", "G17 \u53F0\u5317\u5C0F\u5DE8\u86CB"], "G16": ["G", "G16 \u5357\u4EAC\u5FA9\u8208"], "O11": ["O", "O11 \u6C11\u6B0A\u897F\u8DEF"], "G19": ["G", "G19 \u677E\u5C71"], "O10": ["O", "O10 \u4E2D\u5C71\u570B\u5C0F"], "G18": ["G", "G18 \u5357\u4EAC\u4E09\u6C11"], "O13": ["O", "O13 \u53F0\u5317\u6A4B"], "O12": ["O", "O12 \u5927\u6A4B\u982D"], "O15": ["O", "O15 \u4E09\u91CD"], "O14": ["O", "O14 \u83DC\u5BEE"], "O17": ["O", "O17 \u982D\u524D\u5E84"], "O16": ["O", "O16 \u5148\u55C7\u5BAE"], "O19": ["O", "O19 \u8F14\u5927"], "O18": ["O", "O18 \u65B0\u838A"], "BL09": ["BL", "BL09 \u6C5F\u5B50\u7FE0"], "O20": ["O", "O20 \u4E39\u9CF3"], "BL08": ["BL", "BL08 \u65B0\u57D4"], "BL07": ["BL", "BL07 BL \u677F\u6A4B"], "BL06": ["BL", "BL06 \u5E9C\u4E2D"], "O21": ["O", "O21 \u8FF4\u9F8D"], "BL05": ["BL", "BL05 \u4E9E\u6771\u91AB\u9662"], "BL04": ["BL", "BL04 \u6D77\u5C71"], "BL03": ["BL", "BL03 \u571F\u57CE"], "BL02": ["BL", "BL02 \u6C38\u5BE7"], "R03": ["R", "R03 \u53F0\u5317101\/\u4E16\u8CBF"], "BL01": ["BL", "BL01 \u9802\u57D4"], "R02": ["R", "R02 \u8C61\u5C71"], "G03A": ["G", "G03A \u5C0F\u78A7\u6F6D"], "R05": ["R", "R05 \u5927\u5B89"], "R04": ["R", "R04 \u4FE1\u7FA9\u5B89\u548C"], "R07": ["R", "R07 \u6771\u9580"], "R06": ["R", "R06 \u5927\u5B89\u68EE\u6797\u516C\u5712"], "R09": ["R", "R09 \u53F0\u5927\u91AB\u9662"], "R08": ["R", "R08 \u4E2D\u6B63\u7D00\u5FF5\u5802"], "BL19": ["BL", "BL19 \u6C38\u6625"], "BL18": ["BL", "BL18 \u5E02\u653F\u5E9C"], "BL17": ["BL", "BL17 \u570B\u7236\u7D00\u5FF5\u9928"], "R10": ["R", "R10 \u53F0\u5317\u8ECA\u7AD9"], "BL16": ["BL", "BL16 \u5FE0\u5B5D\u6566\u5316"], "BL15": ["BL", "BL15 \u5FE0\u5B5D\u5FA9\u8208"], "R12": ["R", "R12 \u96D9\u9023"], "BL14": ["BL", "BL14 \u5FE0\u5B5D\u65B0\u751F"], "R11": ["R", "R11 \u4E2D\u5C71"], "BL13": ["BL", "BL13 \u5584\u5C0E\u5BFA"], "R14": ["R", "R14 \u5713\u5C71"], "BL12": ["BL", "BL12 \u53F0\u5317\u8ECA\u7AD9"], "R13": ["R", "R13 \u6C11\u6B0A\u897F\u8DEF"], "BL11": ["BL", "BL11 \u897F\u9580"], "R16": ["R", "R16 \u58EB\u6797"], "BL10": ["BL", "BL10 \u9F8D\u5C71\u5BFA"], "R15": ["R", "R15 \u528D\u6F6D"], "R18": ["R", "R18 \u660E\u5FB7"], "R17": ["R", "R17 \u829D\u5C71"], "R19": ["R", "R19 \u77F3\u724C"] };
+    </script>
+    <script defer src="../static/js/manupilateDOM.js"></script>
+</head>
+
+<body>
+
+    <div style="width: 800px;margin: 30px">
+        <table class="table table-bordered">
+            <tr>
+                <td colspan="3">
+                    <div id="checkBoxForMetroSelect" style="margin: 10px">
+                    </div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-dark" onclick="submitStation()"> Submit Stations</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="start">
+                        Start month:
+                    </label>
+                    <input type="month" id="startMonthSelector" min="2017-01" max="2022-02" value="2017-01">
+                </td>
+                <td> To </td>
+                <td>
+                    <label for="start">
+                        End month:
+                    </label>
+                    <input type="month" id="endMonthSelector" min="2017-01" max="2022-02" value="2022-02">
+                </td>
+                <td>
+                    <button type="button" class="btn btn-dark" onclick="submitDateRange()"> Submit Date
+                        Interval</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="width:1000px;height:1000px;margin: 30px">
+        <canvas id="myChart"></canvas>
+    </div>
+    <div style="width:1000px;height:1000px;margin: 30px">
+        <canvas id="myWeekChart"></canvas>
+    </div>
+
+</body>
+
+</html>
