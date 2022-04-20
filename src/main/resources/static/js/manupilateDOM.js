@@ -3,7 +3,6 @@ const stationList = [];
 
 getListForCreatingMetroLineBtn(stationBtnList);
 generateMetroLineDropDown();
-stationList.sort();
 generateStationMenu();
 addEventListenerToStationAndMetroLine();
 

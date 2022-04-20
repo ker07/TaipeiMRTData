@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import static com.example.TaipeiMRTData.service.StationCodeToName.getStationInfo;
 
@@ -30,12 +31,12 @@ public class VisitService {
 
     public Map<String, Object> buildDataResponseJson () {
         ArrayList<VisitsEntity> list = (ArrayList<VisitsEntity>) adjustVisitsdaysLengthInVisits(getVisits());
-        Map<String, Object> data = new HashMap<>();
+        Map<String, Object> data = new TreeMap<>();
 
         data.put("dataStartDate", "2017-01-01");
         data.put("dataEndDate", "2022-02-28");
 
-        Map<String, Map<String, Object>> stationDataList = new HashMap<String, Map<String, Object>>();
+        Map<String, Map<String, Object>> stationDataList = new TreeMap<String, Map<String, Object>>();
         for (VisitsEntity entity: list) {
             Map<String, Object> element = new HashMap<String, Object>();
             StationCodeToName stationInfo = getStationInfo(entity.getStation());
