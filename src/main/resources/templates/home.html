@@ -20,48 +20,72 @@
 </head>
 
 <body>
-
-    <div style="margin: 30px">
-        <ul id="checkBoxForMetroSelect">
-        </ul>
+    <div style="padding: 20px;">
+        <h1>Summary</h1>
+        <div style="padding: 20px;">
+            <h2>Sorted By Day Of Week (From 2017-01-01~2022-02-28)</h2>
+        </div>
+        <div style="width: 800px;padding: 20px;">
+            <table class="table table-borderless">
+                <tr>
+                    <td>
+                        <h3>Legends:</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="legendForSummary"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div style="width:500px;height:250px;">
+            <canvas id="weekDayChart"></canvas>
+        </div>
+    </div>
+    <div style="padding: 20px;">
+        <h1>Detailed Data</h1>
+        <div style="padding: 20px;">
+            <h2>Visits Daily</h2>
+        </div>
+        <div style="width: 800px;padding: 20px;">
+            <table class="table table-borderless">
+                <tr>
+                    <td colspan="3">
+                        <div id="checkBoxForMetroSelect" style="margin: 10px">
+                        </div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-dark" onclick="submitStation()"> Submit Stations</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="start">
+                            Start month:
+                        </label>
+                        <input type="month" id="startMonthSelector" min="2017-01" max="2022-02" value="2017-01">
+                    </td>
+                    <td> To </td>
+                    <td>
+                        <label for="start">
+                            End month:
+                        </label>
+                        <input type="month" id="endMonthSelector" min="2017-01" max="2022-02" value="2022-02">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-dark" onclick="submitDateRange()"> Submit Date
+                            Interval</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 
-    <div style="width: 800px;margin: 30px">
-        <table class="table table-bordered">
-            <tr>
-                <td colspan="3">
-                    <div id="checkBoxForMetroSelect" style="margin: 10px">
-                    </div>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-dark" onclick="submitStation()"> Submit Stations</button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="start">
-                        Start month:
-                    </label>
-                    <input type="month" id="startMonthSelector" min="2017-01" max="2022-02" value="2017-01">
-                </td>
-                <td> To </td>
-                <td>
-                    <label for="start">
-                        End month:
-                    </label>
-                    <input type="month" id="endMonthSelector" min="2017-01" max="2022-02" value="2022-02">
-                </td>
-                <td>
-                    <button type="button" class="btn btn-dark" onclick="submitDateRange()"> Submit Date
-                        Interval</button>
-                </td>
-            </tr>
-        </table>
+    <div style="width:1000px;height:500px;margin: 30px">
+        <canvas id="dailyLineChart"></canvas>
     </div>
 
-    <div style="width:1000px;height:1000px;margin: 30px">
-        <canvas id="myChart"></canvas>
-    </div>
 </body>
 
 </html>
