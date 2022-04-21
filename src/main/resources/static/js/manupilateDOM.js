@@ -8,7 +8,7 @@ addEventListenerToStationAndMetroLine();
 
 function addEventListenerToStationAndMetroLine() {
   for (code of metroLineCodeList) {
-    var lineSelect = document.getElementById("metroLine" + code);
+    let lineSelect = document.getElementById("metroLine" + code);
 
     lineSelect.addEventListener("click", (event) => {
       let lineCode = event.target.nextElementSibling.textContent;
@@ -38,12 +38,12 @@ function generateStationMenu() {
   }
 
   for (e of stationList) {
-    var metroLine = stationBtnList[e][0];
-    var station = stationBtnList[e][1];
+    let metroLine = stationBtnList[e][0];
+    let station = stationBtnList[e][1];
     emptyStr[metroLine] +=
       '<li><input class="form-check-input stationOn' +
       metroLine +
-      ' stationCheck" type="checkbox" checked>\
+      ' stationCheck" type="checkbox">\
     <label class="form-check-label">' +
       '<span id="square' +
       station +
@@ -76,7 +76,7 @@ function generateMetroLineDropDown() {
     str +=
       '<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" id="metroLine' +
       metroLine +
-      '" checked>\
+      '">\
       <label class="form-check-label">' +
       metroLine +
       '</label></div><a class="dropdown-toggle" data-bs-toggle="dropdown" href="#"></a>\
@@ -150,4 +150,18 @@ function submitDateRange() {
 
 function submitStation() {
   checkDataSetStations(updateCheckedStations());
+}
+
+function transferInRank() {
+  isExcluded = document.getElementById("isExcluded").checked;
+  if (isExcluded) {
+    excludeTransitionStation(stationTWAdded, stationTWVisits, stationColorArray, 15, isTransferStation);
+    isExcluded = true;
+  } else {
+    applyToStationRankData(
+      sortStationRank(stationTWAdded, stationTWVisits, stationColorArray),
+      15
+    );
+    isExcluded = false;
+  };
 }

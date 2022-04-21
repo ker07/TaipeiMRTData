@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@^3"></script>
     <script src="https://cdn.jsdelivr.net/npm/luxon@^2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
+    <script defer src="../static/js/constForChart.js"></script>
     <script defer src="../static/js/scriptToFetchData.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
@@ -21,32 +22,69 @@
 
 <body>
     <div style="padding: 20px;">
-        <h1>Summary</h1>
+        <h2>Summary</h2>
         <div style="padding: 20px;">
-            <h2>Sorted By Day Of Week (From 2017-01-01~2022-02-28)</h2>
+            <h3>Overall Data from 2017-01-01 to 2022-02-28</h3>
         </div>
         <div style="width: 800px;padding: 20px;">
             <table class="table table-borderless">
                 <tr>
                     <td>
-                        <h3>Legends:</h3>
+                        <h4>Sorted by day of week</h4>
+                    </td>
+                    <td>
+                        <h4>Sorted by station(only shows top 15)</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Each line represents a station. y-axis shows daily average visits at day of week. Color of line
+                        was randomly generated.
+                        <br>*Note: If the station is a transfer station, it would show 2 lines, with same data.
+                    </td>
+                    <td>
+                        Each bar represents a station. y-axis shows daily average visits of the station. Color of the
+                        bar was assigned base on which MRT line the station locates. <br>
+                        *Note: The color black means that the station is a transfer station.
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <div id="legendForSummary"></div>
                     </td>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="isExcluded"
+                                onclick=transferInRank()>
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Check to exclude transfer station
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="width:500px;height:250px;">
+                            <canvas id="weekDayChart"></canvas>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="width:500px;height:250px;">
+                            <canvas id="stationRankBarChart"></canvas>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
                 </tr>
             </table>
         </div>
-        <div style="width:500px;height:250px;">
-            <canvas id="weekDayChart"></canvas>
-        </div>
     </div>
     <div style="padding: 20px;">
-        <h1>Detailed Data</h1>
+        <h2>Detailed Data</h2>
         <div style="padding: 20px;">
-            <h2>Visits Daily</h2>
+            <h3>Visits Daily</h3>
         </div>
         <div style="width: 800px;padding: 20px;">
             <table class="table table-borderless">

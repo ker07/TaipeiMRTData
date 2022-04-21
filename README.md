@@ -21,9 +21,9 @@ and data were present:
 ## Preliminary result
 
 Daily results of all stations can be shown in one line chart. Each station/MRT-line can be individually include/excluded. Time interval can be set to fetch data during specific duration. Stations are grouped based on which MRT line it's on.
+Overall data sorted by day of week and station itself was demonstrated below.
 
-20220420
-![20220420.png](./README/20220420.png)
+![20220422.png](./README/20220422.png)
 
 ## Tools used in this project
 

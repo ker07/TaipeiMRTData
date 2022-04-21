@@ -5,84 +5,10 @@ const realUrl = "http://localhost:8080/visits";
 const DateTime = luxon.DateTime;
 const Interval = luxon.Interval;
 
-const dateArray = [];
-
-const dataDailyLineChart = {
-  labels: dateArray,
-  datasets: [],
-};
-
-const configDailyLineChart = {
-  type: "line",
-  data: dataDailyLineChart,
-  options: {
-    scales: {
-      x: {
-        type: "time",
-        min: new Date("2017-01-01").valueOf(),
-        max: new Date("2022-03-01").valueOf(),
-        ticks: {
-          maxRotation: 30,
-          minRotation: 30,
-        },
-        time: {
-          displayFormats: {
-            month: "yyyy-MM",
-            day: "yyyy-MM-dd",
-          },
-          tooltipFormat: "yyyy-MM-dd",
-        },
-      },
-    },
-    pointRadius: 1,
-    showLine: false,
-    plugins: {
-      legend: {
-        display: false,
-      },
-    },
-  },
-};
-
-const dataWeekdayLineChart = {
-  labels: ["", "Mon.", "Tue.", "Wen.", "Thr.", "Fri.", "Sat.", "Sun.", ""],
-  datasets: [],
-};
-
-const configWeekdayLineChart = {
-  type: "line",
-  data: dataWeekdayLineChart,
-  options: {
-    layout: {
-      padding: {
-        left: 30,
-        right: 30,
-      },
-    },
-    plugins: {
-      legend: {
-        display: false,
-      },
-    },
-  },
-};
-
-const options = {
-  parsing: false,
-  animation: false,
-};
-
-const weekDayChart = new Chart(
-  document.getElementById("weekDayChart"),
-  configWeekdayLineChart,
-  options
-);
-
-const dailyLineChart = new Chart(
-  document.getElementById("dailyLineChart"),
-  configDailyLineChart,
-  options
-);
+const stationTWAdded = [];
+const isTransferStation = [];
+const stationTWVisits = [];
+const stationColorArray = {};
 
 function getDataAndDrawChart(url) {
   fetch(url)
@@ -97,7 +23,6 @@ function getDataAndDrawChart(url) {
       );
       addDatasetToChartData(responseJson["data"]);
 
-      // dailyLineChart.update();
       weekDayChart.update();
     });
 }
@@ -108,7 +33,7 @@ function addDatesInRangeToLabels(datesList, startDate, endDate) {
     new DateTime.fromSQL(endDate)
   );
 
-  for (var d of days(interval)) {
+  for (let d of days(interval)) {
     datesList.push(d);
   }
 }
@@ -141,11 +66,38 @@ function* days(interval) {
 function addDatasetToChartData(dataPartOfResponse) {
   for (stationIndex in dataPartOfResponse) {
     let randomColor = getRandomRgba();
-    let datasetsToAddTodailyData = [];
-    const datasetToAddToWeekdayData = [null, 0, 0, 0, 0, 0, 0, 0, null];
+
+    const datasetsToAddToDailyData = [];
+
+    const datasetToAddToWeekdayData = [0, 0, 0, 0, 0, 0, 0];
+    const dayOfWeekCounter = [0, 0, 0, 0, 0, 0, 0];
+
+    var datasetToAddToStationRankData = null;
 
     let stationName = dataPartOfResponse[stationIndex]["stationName"];
     let stationDetail = dataPartOfResponse[stationIndex];
+    let stationTWName = stationName.split(" ").slice(1).join(" ");
+
+    if (!stationTWAdded.includes(stationTWName)) {
+      stationTWAdded.push(stationTWName);
+      datasetToAddToStationRankData = 0;
+      if (stationName.startsWith("BR")) {
+        stationColorArray[stationTWName] = "#c48c31";
+      } else if (stationName.startsWith("R")) {
+        stationColorArray[stationTWName] = "#e3002c";
+      } else if (stationName.startsWith("G")) {
+        stationColorArray[stationTWName] = "#008659";
+      } else if (stationName.startsWith("O")) {
+        stationColorArray[stationTWName] = "#f8b61c";
+      } else if (stationName.startsWith("BL")) {
+        stationColorArray[stationTWName] = "#0070bd";
+      } else if (stationName.startsWith("Y")) {
+        stationColorArray[stationTWName] = "#ffdb00";
+      }
+    } else {
+      isTransferStation.push(stationTWName);
+      stationColorArray[stationTWName] = "#000000";
+    }
 
     document.getElementById("square" + stationName).style.color = randomColor;
     document.getElementById("square1" + stationName).style.color = randomColor;
@@ -153,30 +105,107 @@ function addDatasetToChartData(dataPartOfResponse) {
     for (visitIndex in stationDetail["visitDataSince20170101"]) {
       let date = dateArray[visitIndex];
       let visit = stationDetail["visitDataSince20170101"][visitIndex];
-      datasetsToAddTodailyData.push({
+
+      datasetsToAddToDailyData.push({
         x: date,
         y: visit,
       });
-      datasetToAddToWeekdayData[date.weekday] += visit;
+
+      let dayOfWeekIndex = date.weekday - 1;
+      datasetToAddToWeekdayData[dayOfWeekIndex] += visit;
+      dayOfWeekCounter[dayOfWeekIndex] += 1;
+
+      if (datasetToAddToStationRankData != null) {
+        datasetToAddToStationRankData += visit;
+      }
     }
 
-    pushDataSetToChart(
+    if (
+      stationTWAdded.includes(stationTWName) &&
+      !isTransferStation.includes(stationTWName)
+    ) {
+      datasetToAddToStationRankData = Math.floor(
+        datasetToAddToStationRankData / dateArray.length
+      );
+
+      stationTWVisits.push(datasetToAddToStationRankData);
+    }
+
+    datasetToAddToWeekdayData.forEach((e, index) => {
+      datasetToAddToWeekdayData[index] = Math.floor(
+        datasetToAddToWeekdayData[index] / dayOfWeekCounter[index]
+      );
+    });
+    datasetToAddToWeekdayData.push(null);
+    datasetToAddToWeekdayData.unshift(null);
+
+    pushDataSetToLineChart(
       stationName,
-      datasetsToAddTodailyData,
+      datasetsToAddToDailyData,
       randomColor,
       dataDailyLineChart
     );
 
-    pushDataSetToChart(
+    pushDataSetToLineChart(
       stationName,
       datasetToAddToWeekdayData,
       randomColor,
       dataWeekdayLineChart
     );
   }
+
+  applyToStationRankData(
+    sortStationRank(stationTWAdded, stationTWVisits, stationColorArray),
+    15
+  );
 }
 
-function pushDataSetToChart(name, dataset, color, ChartData) {
+function sortStationRank(labelArray, dataArray, colorArray) {
+  arrayToSort = labelArray.map((d, i) => {
+    return {
+      label: d,
+      data: dataArray[i],
+      color: colorArray[d],
+    };
+  });
+  sortedArray = arrayToSort.sort((a, b) => {
+    return b.data - a.data;
+  });
+  return sortedArray;
+}
+
+function applyToStationRankData(sortedArray, size) {
+  let newArrayLabels = [];
+  let newArrayData = [];
+  let newArrayColor = [];
+  sortedArray.forEach((d) => {
+    newArrayLabels.push(d.label);
+    newArrayData.push(d.data);
+    newArrayColor.push(d.color);
+  });
+
+  dataStationRankBarChart.datasets[0].data = newArrayData.slice(0, size);
+  dataStationRankBarChart.labels = newArrayLabels.slice(0, size);
+  dataStationRankBarChart.datasets[0].backgroundColor = newArrayColor.slice(
+    0,
+    size
+  );
+  stationRankBarChart.update();
+}
+
+function excludeTransitionStation(labelArray, dataArray, colorArray, size, transferStationArray) {
+  sorted = sortStationRank(labelArray, dataArray, colorArray);
+  excluded = [];
+  sorted.forEach((d) => {
+    if (!transferStationArray.includes(d.label)){
+      excluded.push(d);
+    }
+  });
+
+  applyToStationRankData(excluded, size);
+}
+
+function pushDataSetToLineChart(name, dataset, color, ChartData) {
   let datasetToAdd = {
     label: name,
     data: dataset,
@@ -188,7 +217,7 @@ function pushDataSetToChart(name, dataset, color, ChartData) {
 }
 
 // For testing locally , open "hello for testing locally.html" and use code below
-// getDataAndDrawChart(mockPath);
+getDataAndDrawChart(mockPath);
 
 // For Spring Boot routing to 'real' run fetching a deployed database on heroku-postgresql, use line below
-getDataAndDrawChart(realUrl);
+// getDataAndDrawChart(realUrl);
