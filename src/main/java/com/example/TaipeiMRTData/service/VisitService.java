@@ -45,6 +45,7 @@ public class VisitService {
             element.put("stationName", stationCodeStationName);
             element.put("metroLineCode", metroLineCode);
             element.put("visitDataSince20170101", entity.getVisitday());
+            element.put("hourSum", entity.getHourSum());
             stationDataList.put(stationInfo.getStationCode(), element);
         }
         data.put("data", stationDataList);

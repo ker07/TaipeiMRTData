@@ -4,16 +4,17 @@ const stationList = [];
 getListForCreatingMetroLineBtn(stationBtnList);
 generateMetroLineDropDown();
 generateStationMenu();
-addEventListenerToStationAndMetroLine();
+addEventListenerToStationAndMetroLine("");
+addEventListenerToStationAndMetroLine("1");
 
-function addEventListenerToStationAndMetroLine() {
+function addEventListenerToStationAndMetroLine(id) {
   for (code of metroLineCodeList) {
-    let lineSelect = document.getElementById("metroLine" + code);
+    let lineSelect = document.getElementById("metroLine" + id + code);
 
     lineSelect.addEventListener("click", (event) => {
       let lineCode = event.target.nextElementSibling.textContent;
       document
-        .querySelectorAll("input.stationOn" + lineCode)
+        .querySelectorAll("input.stationOn" + id + lineCode)
         .forEach((station) => {
           station.checked = event.target.checked;
         });
@@ -21,9 +22,10 @@ function addEventListenerToStationAndMetroLine() {
   }
 }
 
-function updateCheckedStations() {
+function updateCheckedStations(id) {
+  let elementId = "input.stationCheck" + id + ":checked";
   const checkedStations = [];
-  document.querySelectorAll("input.stationCheck:checked").forEach((element) => {
+  document.querySelectorAll(elementId).forEach((element) => {
     checkedStations.push(element.nextElementSibling.childNodes[1].textContent);
   });
   return checkedStations;
@@ -40,24 +42,15 @@ function generateStationMenu() {
   for (e of stationList) {
     let metroLine = stationBtnList[e][0];
     let station = stationBtnList[e][1];
-    emptyStr[metroLine] +=
-      '<li><input class="form-check-input stationOn' +
-      metroLine +
-      ' stationCheck" type="checkbox">\
-    <label class="form-check-label">' +
-      '<span id="square' +
-      station +
-      '">&#9608\u0020</span>' +
-      station +
-      "</label></div></li>";
 
-    emptyStrForSummary[metroLine] +=
-      '<li><label class="form-check-label">' +
-      '<span id="square1' +
-      station +
-      '">&#9608\u0020</span>' +
-      station +
-      "</label></li>";
+    let first = '<li><input class="form-check-input stationOn';
+    let second = metroLine + ' stationCheck';
+    let third = '" type="checkbox"><label class="form-check-label"><span id="square';
+    let last =
+      station + '">&#9608\u0020</span>' + station + "</label></div></li>";
+
+    emptyStr[metroLine] += first + second + third + last;
+    emptyStrForSummary[metroLine] += first + "1" + second + "1" + third + "1" + last;
   }
 
   for (line in emptyStr) {
@@ -73,25 +66,17 @@ function generateMetroLineDropDown() {
   let strLegend = "";
 
   metroLineCodeList.forEach((metroLine) => {
-    str +=
-      '<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" id="metroLine' +
+    let first =
+      '<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" id="metroLine';
+    let second =
       metroLine +
-      '">\
-      <label class="form-check-label">' +
+      '"><label class="form-check-label">' +
       metroLine +
-      '</label></div><a class="dropdown-toggle" data-bs-toggle="dropdown" href="#"></a>\
-      <ul class="dropdown-menu" id="dropDownMetroLine' +
-      metroLine +
-      '"></ul>';
+      '</label></div><a class="dropdown-toggle" data-bs-toggle="dropdown" href="#"></a><ul class="dropdown-menu" id="dropDownMetroLine';
+    let third = metroLine + '"></ul>';
+    str += first + second + third;
 
-    strLegend +=
-      '<div class="form-check form-check-inline">\
-      <label class="form-check-label">' +
-      metroLine +
-      '</label></div><a class="dropdown-toggle" data-bs-toggle="dropdown" href="#"></a>\
-      <ul class="dropdown-menu" id="dropDownMetroLine1' +
-      metroLine +
-      '"></ul>';
+    strLegend += first + "1" + second + "1" + third;
   });
   document.getElementById("checkBoxForMetroSelect").innerHTML = str;
   document.getElementById("legendForSummary").innerHTML = strLegend;
@@ -107,24 +92,45 @@ function getListForCreatingMetroLineBtn(list) {
   }
 }
 
-function checkDataSetStations(list) {
+function checkDataSetStations(list, id) {
   if (list) {
-    for (d in dataDailyLineChart.datasets) {
-      if (
-        list.includes(dataDailyLineChart.datasets[d]["label"]) &&
-        dailyLineChart.getDataVisibility(d)
-      ) {
-        dailyLineChart.setDatasetVisibility(d, true);
+    if (id == '') {
+      for (d in dataDailyLineChart.datasets) {
+        if (
+          list.includes(dataDailyLineChart.datasets[d]["label"])
+        ) {
+          dailyLineChart.setDatasetVisibility(d, true);
+        }
+        if (
+          !list.includes(dataDailyLineChart.datasets[d]["label"])
+        ) {
+          dailyLineChart.setDatasetVisibility(d, false);
+        }
       }
-      if (
-        !list.includes(dataDailyLineChart.datasets[d]["label"]) &&
-        dailyLineChart.getDataVisibility(d)
-      ) {
-        dailyLineChart.setDatasetVisibility(d, false);
-      }
+      dailyLineChart.update();
+    } else if (id == '1') {
+      console.log("called");
+      console.log(dataWeekdayLineChart.datasets);
+      for (d in dataWeekdayLineChart.datasets) {
+        if (
+          list.includes(dataWeekdayLineChart.datasets[d]["label"])
+        ) {
+          console.log("show");
+          weekDayChart.setDatasetVisibility(d, true);
+          hourlyDataChart.setDatasetVisibility(d, true);
+        };
+        if (
+          !list.includes(dataWeekdayLineChart.datasets[d]["label"])
+        ) {
+          console.log("hide");
+          weekDayChart.setDatasetVisibility(d, false);
+          hourlyDataChart.setDatasetVisibility(d, false);
+        };
+      };
+      weekDayChart.update();
+      hourlyDataChart.update();
     }
-    dailyLineChart.update();
-  }
+  };
 }
 
 function submitDateRange() {
@@ -148,14 +154,20 @@ function submitDateRange() {
   }
 }
 
-function submitStation() {
-  checkDataSetStations(updateCheckedStations());
+function submitStation(id) {
+  checkDataSetStations(updateCheckedStations(id), id);
 }
 
 function transferInRank() {
   isExcluded = document.getElementById("isExcluded").checked;
   if (isExcluded) {
-    excludeTransitionStation(stationTWAdded, stationTWVisits, stationColorArray, 15, isTransferStation);
+    excludeTransitionStation(
+      stationTWAdded,
+      stationTWVisits,
+      stationColorArray,
+      15,
+      isTransferStation
+    );
     isExcluded = true;
   } else {
     applyToStationRankData(
@@ -163,5 +175,5 @@ function transferInRank() {
       15
     );
     isExcluded = false;
-  };
+  }
 }

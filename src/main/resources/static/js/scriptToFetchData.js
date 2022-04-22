@@ -24,6 +24,7 @@ function getDataAndDrawChart(url) {
       addDatasetToChartData(responseJson["data"]);
 
       weekDayChart.update();
+      hourlyDataChart.update();
     });
 }
 
@@ -118,7 +119,7 @@ function addDatasetToChartData(dataPartOfResponse) {
       if (datasetToAddToStationRankData != null) {
         datasetToAddToStationRankData += visit;
       }
-    }
+    };
 
     if (
       stationTWAdded.includes(stationTWName) &&
@@ -129,7 +130,7 @@ function addDatasetToChartData(dataPartOfResponse) {
       );
 
       stationTWVisits.push(datasetToAddToStationRankData);
-    }
+    };
 
     datasetToAddToWeekdayData.forEach((e, index) => {
       datasetToAddToWeekdayData[index] = Math.floor(
@@ -138,6 +139,22 @@ function addDatasetToChartData(dataPartOfResponse) {
     });
     datasetToAddToWeekdayData.push(null);
     datasetToAddToWeekdayData.unshift(null);
+
+    const datasetToAddToHourlyData = stationDetail["hourSum"];
+    datasetToAddToHourlyData.forEach((e, index) => {
+      datasetToAddToHourlyData[index] = Math.floor(
+        datasetToAddToHourlyData[index] / dateArray.length
+      );
+    });
+    datasetToAddToHourlyData.push(null);
+    datasetToAddToHourlyData.unshift(null);
+
+    pushDataSetToLineChart(
+      stationName,
+      datasetToAddToHourlyData,
+      randomColor,
+      dataHourlyDataChart
+    );
 
     pushDataSetToLineChart(
       stationName,

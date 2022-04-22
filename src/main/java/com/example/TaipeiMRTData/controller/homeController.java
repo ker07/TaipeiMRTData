@@ -16,7 +16,6 @@ public class homeController {
     @GetMapping("/home")
     public String hello(Model model) {
         model.addAttribute("stationList", homeService.getStationListForCreatingStationBtn());
-        System.out.println(homeService.getStationListForCreatingStationBtn());
         return "home";
     }
 }

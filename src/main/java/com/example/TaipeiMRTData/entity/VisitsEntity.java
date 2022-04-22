@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name="visits_table")
+@Table(name="visit_table1")
 @TypeDef(
         name = "list-array",
         typeClass = ListArrayType.class
@@ -34,6 +34,9 @@ public class VisitsEntity{
 
     private int visits;
 
+    @Type(type = "list-array")
+    private List<Integer> hour_sum;
+
     @Transient
     private static final LocalDate newestDataDate = LocalDate.of(2022, 2, 28);
     @Transient
@@ -43,12 +46,13 @@ public class VisitsEntity{
 
     }
 
-    public VisitsEntity(String station, String line, LocalDate startdate, List<Integer> visitday, int visits) {
+    public VisitsEntity(String station, String line, LocalDate startdate, List<Integer> visitday, int visits, List<Integer> hour_sum) {
         this.station = station;
         this.line = line;
         this.startdate = startdate;
         this.visitday = visitday;
         this.visits = visits;
+        this.hour_sum = hour_sum;
     }
 
     public int getDuration() {
@@ -75,7 +79,7 @@ public class VisitsEntity{
 
     @Override
     public int hashCode() {
-        return Objects.hash(station, line, startdate, visitday, visits);
+        return Objects.hash(getStation(), getLine(), getStartdate(), getVisitday(), getVisits(), hour_sum);
     }
 
     public String getStation() {
@@ -100,5 +104,9 @@ public class VisitsEntity{
 
     public void setVisitday(List<Integer> visitday) {
         this.visitday = visitday;
+    }
+
+    public List<Integer> getHourSum() {
+        return hour_sum;
     }
 }
