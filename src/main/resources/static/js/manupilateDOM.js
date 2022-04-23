@@ -118,6 +118,7 @@ function checkDataSetStations(list, id) {
           console.log("show");
           weekDayChart.setDatasetVisibility(d, true);
           hourlyDataChart.setDatasetVisibility(d, true);
+          monthlyDataChart.setDatasetVisibility(d, true);
         };
         if (
           !list.includes(dataWeekdayLineChart.datasets[d]["label"])
@@ -125,10 +126,12 @@ function checkDataSetStations(list, id) {
           console.log("hide");
           weekDayChart.setDatasetVisibility(d, false);
           hourlyDataChart.setDatasetVisibility(d, false);
+          monthlyDataChart.setDatasetVisibility(d, false);
         };
       };
       weekDayChart.update();
       hourlyDataChart.update();
+      monthlyDataChart.update();
     }
   };
 }

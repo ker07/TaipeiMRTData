@@ -30,7 +30,7 @@
             <table class="table table-borderless">
                 <tr>
                     <td>
-                        <h4>Sorted by station(only shows top 15)</h4>
+                        <h4>&#9660 Sorted by station(only shows top 15)</h4>
                     </td>
                     <td></td>
                 </tr>
@@ -61,34 +61,32 @@
                         </div>
                     </td>
                     <td>
-                        
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <h4>Sorted by day of week</h4>
-                    </td>
-                    <td>
-                        <h4>Sorted by time</h4>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Each line represents a station. y-axis shows daily average visits at day of week. Color of line
-                        was randomly generated.
-                        <br>*Note: If the station is a transfer station, it would show 2 lines, with same data.
 
                     </td>
+                </tr>
+                <tr>
                     <td>
-                        Each line represents a station. y-axis shows hourly average visits at each time. Color of line
-                        was randomly generated.
+                        <h4>&#9660 Sorted by day of week</h4>
+                    </td>
+                    <td>
+                        <h4>&#9660 Sorted by time</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Each line represents a station. y-axis shows daily average visits at each <b>day of week</b>.
+                        <br>*Note: If the station is a transfer station, it would show 2 lines, with same data.
+                    </td>
+                    <td>
+                        Each line represents a station. y-axis shows daily average visits at each <b>hour</b>.
                         <br>*Note: If the station is a transfer station, it would show 2 lines, with same data.
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2" style="text-align: center; vertical-align: middle;">
                         <span id="legendForSummary"></span>
-                        <button type="button" class="btn btn-dark btn-sm" onclick="submitStation('1')">Submit Stations</button>
+                        <button type="button" class="btn btn-dark btn-sm" onclick="submitStation('1')">Submit
+                            Stations</button>
                     </td>
                 </tr>
                 <tr>
@@ -100,6 +98,25 @@
                     <td>
                         <div style="width:500px;height:250px;">
                             <canvas id="hourlyDataChart"></canvas>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="width:500px;height:250px;">
+                            <canvas id="monthlyDataChart"></canvas>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>&#9650 Sorted by month</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Each line represents a station. y-axis shows daily average visits at each <b>month</b>.
+                        <br>*Note: If the station is a transfer station, it would show 2 lines, with same data.
                     </td>
                 </tr>
             </table>

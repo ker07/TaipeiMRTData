@@ -91,7 +91,7 @@ const dataHourlyDataChart = {
   datasets: [],
 };
 
-const configHourlyDataChart = {
+const configHourlyChart = {
   type: "line",
   data: dataHourlyDataChart,
   options: {
@@ -109,8 +109,32 @@ const configHourlyDataChart = {
   },
 };
 
+const dataMonthlyLineChart = {
+  labels: ["", "Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec", ""],
+  datasets: [],
+};
+
+const configMonthlyLineChart = {
+  type: "line",
+  data: dataMonthlyLineChart,
+  options: {
+    layout: {
+      padding: {
+        left: 30,
+        right: 30,
+      },
+    },
+    plugins: {
+      legend: {
+        display: false
+      },
+    },
+  },
+};
+
 const options = {
-  parsing: false
+  parsing: false,
+  animation: false
 };
 
 const weekDayChart = new Chart(
@@ -133,6 +157,12 @@ const dailyLineChart = new Chart(
 
 const hourlyDataChart = new Chart(
   document.getElementById("hourlyDataChart"),
-  configHourlyDataChart,
+  configHourlyChart,
+  options
+);
+
+const monthlyDataChart = new Chart(
+  document.getElementById("monthlyDataChart"),
+  configMonthlyLineChart,
   options
 );

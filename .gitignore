@@ -32,3 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 20220422.key
+src/main/resources/application.properties

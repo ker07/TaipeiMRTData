@@ -25,6 +25,7 @@ function getDataAndDrawChart(url) {
 
       weekDayChart.update();
       hourlyDataChart.update();
+      monthlyDataChart.update();
     });
 }
 
@@ -73,6 +74,9 @@ function addDatasetToChartData(dataPartOfResponse) {
     const datasetToAddToWeekdayData = [0, 0, 0, 0, 0, 0, 0];
     const dayOfWeekCounter = [0, 0, 0, 0, 0, 0, 0];
 
+    const datasetAddToMonthlyData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    const monthCounter = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
     var datasetToAddToStationRankData = null;
 
     let stationName = dataPartOfResponse[stationIndex]["stationName"];
@@ -119,6 +123,10 @@ function addDatasetToChartData(dataPartOfResponse) {
       if (datasetToAddToStationRankData != null) {
         datasetToAddToStationRankData += visit;
       }
+
+      let monthIndex = date.month - 1;
+      datasetAddToMonthlyData[monthIndex] += visit;
+      monthCounter[monthIndex] += 1;
     };
 
     if (
@@ -139,6 +147,14 @@ function addDatasetToChartData(dataPartOfResponse) {
     });
     datasetToAddToWeekdayData.push(null);
     datasetToAddToWeekdayData.unshift(null);
+
+    datasetAddToMonthlyData.forEach((e, index) => {
+      datasetAddToMonthlyData[index] = Math.floor(
+        datasetAddToMonthlyData[index] / monthCounter[index]
+      );
+    });
+    datasetAddToMonthlyData.push(null);
+    datasetAddToMonthlyData.unshift(null);
 
     const datasetToAddToHourlyData = stationDetail["hourSum"];
     datasetToAddToHourlyData.forEach((e, index) => {
@@ -169,6 +185,13 @@ function addDatasetToChartData(dataPartOfResponse) {
       randomColor,
       dataWeekdayLineChart
     );
+
+    pushDataSetToLineChart(
+      stationName,
+      datasetAddToMonthlyData,
+      randomColor,
+      dataMonthlyLineChart
+    )
   }
 
   applyToStationRankData(
@@ -210,11 +233,17 @@ function applyToStationRankData(sortedArray, size) {
   stationRankBarChart.update();
 }
 
-function excludeTransitionStation(labelArray, dataArray, colorArray, size, transferStationArray) {
+function excludeTransitionStation(
+  labelArray,
+  dataArray,
+  colorArray,
+  size,
+  transferStationArray
+) {
   sorted = sortStationRank(labelArray, dataArray, colorArray);
   excluded = [];
   sorted.forEach((d) => {
-    if (!transferStationArray.includes(d.label)){
+    if (!transferStationArray.includes(d.label)) {
       excluded.push(d);
     }
   });
