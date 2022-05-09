@@ -109,13 +109,10 @@ function checkDataSetStations(list, id) {
       }
       dailyLineChart.update();
     } else if (id == '1') {
-      console.log("called");
-      console.log(dataWeekdayLineChart.datasets);
       for (d in dataWeekdayLineChart.datasets) {
         if (
           list.includes(dataWeekdayLineChart.datasets[d]["label"])
         ) {
-          console.log("show");
           weekDayChart.setDatasetVisibility(d, true);
           hourlyDataChart.setDatasetVisibility(d, true);
           monthlyDataChart.setDatasetVisibility(d, true);
@@ -123,7 +120,6 @@ function checkDataSetStations(list, id) {
         if (
           !list.includes(dataWeekdayLineChart.datasets[d]["label"])
         ) {
-          console.log("hide");
           weekDayChart.setDatasetVisibility(d, false);
           hourlyDataChart.setDatasetVisibility(d, false);
           monthlyDataChart.setDatasetVisibility(d, false);

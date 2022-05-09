@@ -1,5 +1,3 @@
-const mockFractionPath = "../static/test_fraction.JSON";
-const mockPath = "../static/test.JSON";
 const realUrl = "http://localhost:8080/visits";
 
 const DateTime = luxon.DateTime;
@@ -262,8 +260,4 @@ function pushDataSetToLineChart(name, dataset, color, ChartData) {
   ChartData["datasets"].push(datasetToAdd);
 }
 
-// For testing locally , open "hello for testing locally.html" and use code below
-getDataAndDrawChart(mockPath);
-
-// For Spring Boot routing to 'real' run fetching a deployed database on heroku-postgresql, use line below
-// getDataAndDrawChart(realUrl);
+ getDataAndDrawChart(realUrl);
